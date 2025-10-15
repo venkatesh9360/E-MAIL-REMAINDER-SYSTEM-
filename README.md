@@ -1,2 +1,136 @@
 # E-MAIL-REMAINDER-SYSTEM-
 E-Mail remainder system informations
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-MAIL REMAINDER SYSTEM</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+      color: #555;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .message {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+    }
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>E-MAIL REMINDER SYSTEM</h1>
+    <form id="reminderForm">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="example@domain.com" required />
+
+      <label for="message">Reminder Message</label>
+      <textarea id="message" name="message" rows="4" placeholder="Enter your reminder..." required></textarea>
+
+      <label for="time">Reminder Time</label>
+      <input type="datetime-local" id="time" name="time" required />
+
+      <button type="submit">Set Reminder</button>
+    </form>
+
+    <div id="status" class="message"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('reminderForm');
+    const statusDiv = document.getElementById('status');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+      const time = new Date(form.time.value);
+
+      if (!email || !message || isNaN(time.getTime())) {
+        showMessage('Please fill in all fields with valid data.', 'error');
+        return;
+      }
+
+      const now = new Date();
+
+      if (time <= now) {
+        showMessage('Reminder time must be in the future.', 'error');
+        return;
+      }
+
+      const delay = time.getTime() - now.getTime();
+
+      showMessage(`Reminder set for ${time.toLocaleString()}`, 'success');
+
+      // Schedule the reminder alert (simulation)
+      setTimeout(() => {
+        alert(`Reminder for ${email}:\n\n${message}`);
+      }, delay);
+
+      // Optionally clear form
+      form.reset();
+    });
+
+    function showMessage(msg, type) {
+      statusDiv.textContent = msg;
+      statusDiv.className = 'message ' + type;
+      statusDiv.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
